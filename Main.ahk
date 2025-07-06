@@ -47,9 +47,6 @@ global gearAutoActive := 0
 global seedAutoActive := 0
 global eggAutoActive  := 0
 global cosmeticAutoActive := 0
-global honeyShopAutoActive := 0
-global honeyDepositAutoActive := 0
-global collectPollinatedAutoActive := 0
 
 global GAME_PASS_ID  := 1244038348
 global VERIFIED_KEY  := "VerifiedUser"
@@ -330,18 +327,6 @@ uiUniversal(order := 0, exitUi := 1, continuous := 0, spam := 0, spamCount := 30
             repeatKey(dir, sendCount)
         }
         else if (dir = "down") {
-            if ((currentArray.Name = "honeyItems") && (previousIndex = 1 || previousIndex = 10 || previousIndex = 12)) {
-                if (!(findIndex(indexArray, 1, "bool"))) {
-                    sendCount++
-                }
-                sendCount--
-            }
-            repeatKey(dir, sendCount)
-            repeatKey("Enter")
-            repeatKey(dir)
-            if ((currentArray.Name = "honeyItems") && (index = 1 || index = 10 || index = 12)) {
-                repeatKey(dir)
-            }
         }
 
     }
@@ -534,10 +519,7 @@ dialogueClick(shop) {
     if (shop = "gear") {
         SafeClickRelative(midX + 0.4, midY - 0.1)
     }
-    else if (shop = "honey") {
-        SafeClickRelative(midX + 0.4, midY)
-    }
-
+    
     Sleep, 500
 
     Loop, 5 {
@@ -609,9 +591,6 @@ closeShop(shop, success) {
     if (success) {
 
         Sleep, 500
-        if (shop = "Honey") {
-        uiUniversal("43333311140320", 1, 1)
-        }
         else {
             uiUniversal("4330320", 1, 1)
         }
@@ -822,10 +801,10 @@ quickDetect(color1, color2, variation := 10, x1Ratio := 0.0, y1Ratio := 0.0, x2R
 ; item arrays
 
 seedItems := ["Carrot Seed", "Strawberry Seed", "Blueberry Seed", "Tomato Seed"
-             , "Cauliflower Seed", "Watermelon Seed", "Rafflesia Seed"
-             , "Green Apple Seed", "Avocado Seed", "Banana Seed", "Pineapple Seed"
-             , "Kiwi Seed", "Bell Pepper Seed", "Prickly Pear Seed", "Loquat Seed"
-             , "Feijoa Seed", "Pitcher Plant", "Sugar Apple"]
+             , "Daffodil Seed", "Watermelon Seed", "Pumpkin Seed"
+             , "Apple Seed", "Bamboo Seed", "Coconut Seed", "Cactus Seed"
+             , "Drago Fruit Seed", "Mango Seed", "Grape Seed", "Mushroom Seed"
+             , "Pepper Seed", "Cacao Plant", "Beanstalk Apple", "Ember Lily", "Sugar Apple", "Burning Bud"]
 
 gearItems := ["Watering Can", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler"
              , "Godly Sprinkler", "Magnifying Glass", "Tanning Mirror", "Master Sprinkler", "Cleaning Spray", "Favorite Tool", "Harvest Tool", "Friendship Pot"]
@@ -836,15 +815,8 @@ eggItems := ["Common Egg", "Common Summer Egg", "Rare Summer Egg", "Mythical Egg
 cosmeticItems := ["Cosmetic 1", "Cosmetic 2", "Cosmetic 3", "Cosmetic 4", "Cosmetic 5"
              , "Cosmetic 6",  "Cosmetic 7", "Cosmetic 8", "Cosmetic 9"]
 
-; honeyItems := ["Flower Seed Pack", "placeHolder1", "Lavender Seed", "Nectarshade Seed", "Nectarine Seed", "Hive Fruit Seed", "Pollen Rader", "Nectar Staff"
-;             , "Honey Sprinkler", "Bee Egg", "placeHolder2", "Bee Crate", "placeHolder3", "Honey Comb", "Bee Chair", "Honey Torch", "Honey Walkway"]
-
-;realHoneyItems := ["Flower Seed Pack", "Lavender Seed", "Nectarshade Seed", "Nectarine Seed", "Hive Fruit Seed", "Pollen Rader", "Nectar Staff"
-;            , "Honey Sprinkler", "Bee Egg", "Bee Crate", "Honey Comb", "Bee Chair", "Honey Torch", "Honey Walkway"]
-
 global craftItems, craftItems2
-craftItems := ["Crafters Seed Pack", "Manuka Flower", "Dandelion"
-    , "Lumira", "Honeysuckle", "Bee Balm", "Nectar Thorn", "Suncoil"]
+craftItems := ["Peace Lily", "Aloe Vera", "Guanaba"]
 craftItems2 := ["Tropical Mist Sprinkler", "Berry Blusher Sprinkler"
     , "Spice Spritzer Sprinkler", "Sweet Soaker Sprinkler"
     , "Flower Freeze Sprinkler", "Stalk Sprout Sprinkler"
@@ -2611,18 +2583,6 @@ SaveSettings:
     Loop, % seedItems.Length()
         IniWrite, % (SeedItem%A_Index%   ? 1 : 0), %settingsFile%, Seed, Item%A_Index%
     IniWrite, % SelectAllSeeds,        %settingsFile%, Seed, SelectAllSeeds
-
-    ; — Honey section —
-    ; first the “place” items 1–10
-    Loop, 10
-        IniWrite, % (HoneyItem%A_Index%  ? 1 : 0), %settingsFile%, Honey, Item%A_Index%
-    IniWrite, % SelectAllHoney,        %settingsFile%, Honey, SelectAllHoney
-    IniWrite, % AutoHoney,             %settingsFile%, Honey, AutoDepositHoney
-    ; then 11–14
-    Loop, % realHoneyItems.Length()
-        if (A_Index > 10 && A_Index <= 14)
-            IniWrite, % (HoneyItem%A_Index% ? 1 : 0), %settingsFile%, Honey, Item%A_Index%
-    IniWrite, % AutoCollectPollinated, %settingsFile%, Honey, AutoCollectPollinated
 
     ; — Main section —
     IniWrite, % AutoAlign,             %settingsFile%, Main, AutoAlign
